@@ -1,4 +1,4 @@
-export const COLORS = {
+export const DARKCOLORS = {
   primary: '#161616',  // Deep Black (Main Theme)
   secondary: '#1E1E1E', // Dark Gray (Modern Touch)
   backgroundColor: '#0E0E0E', // Deep Black (Clean & Elegant)
@@ -8,6 +8,15 @@ export const COLORS = {
   textSecondary: '#BCBCBC',  // Light Gray (Subtext)
 };
 
+export const LIGHTCOLORS = {
+  primary: '#EAEAEA',  // Light Gray (Opposite of Deep Black)
+  secondary: '#F5F5F5', // Soft White (Opposite of Dark Gray)
+  backgroundColor: '#FFFFFF', // Pure White (Opposite of Deep Black)
+  lightBackgroundColor: '#DADADA', // Light Gray (Opposite of Darker Background)
+  highlight: '#0057B7',  // Deep Blue (Opposite of Royal Blue for balance)
+  textPrimary: '#000000',  // Black (Opposite of White Text)
+  textSecondary: '#4D4D4D',  // Dark Gray (Opposite of Light Gray Subtext)
+};
 export const FONT = {
   ten: 10,
   eleven: 11,
@@ -42,7 +51,21 @@ export const FONT = {
   forty: 40
 };
 
-export const TEXTINPUT = {
+export const TEXTINPUTLIGHT = {
+  width: '100%',
+  fontSize: 15,
+  height: 40,
+  color: '#000000', // Black text for light mode
+  borderColor: '#B0B0B0', // Lighter border color for better contrast
+  borderWidth: 1,
+  borderStyle: 'solid',
+  marginBottom: 10,
+  borderRadius: 5,
+  paddingHorizontal: 10,
+  backgroundColor: '#FFFFFF', // White background for input
+};
+
+export const TEXTINPUTDARK = {
   width: '100%',
   fontSize: 15,
   height: 40,
@@ -112,4 +135,4 @@ export const SIZES = {
 };
 
 
-export default { BUTTON, BUTTONTEXT, COLORS, PLACEHOLDERCOLOR, FONT, SIZES, TEXTINPUT };
+export default { BUTTON, BUTTONTEXT, LIGHTCOLORS, DARKCOLORS, PLACEHOLDERCOLOR, FONT, SIZES, TEXTINPUTDARK };
