@@ -1,22 +1,35 @@
 export const DARKCOLORS = {
+  dark: 1,
   primary: '#161616',  // Deep Black (Main Theme)
   secondary: '#1E1E1E', // Dark Gray (Modern Touch)
+  menuIconColor: '#FFFFFF',
+  forgotPassword: '#9A9A9A',
+  forgotPasswordColor: '#FFFFFF',
+  menuBackgroundColor: '#4C4C4C',
   backgroundColor: '#0E0E0E', // Deep Black (Clean & Elegant)
   lightBackgroundColor: '#2A2A2A',
   highlight: '#1E88E5',  // Royal Blue (For Interactions)
   textPrimary: '#FFFFFF',  // White (Main Text)
   textSecondary: '#BCBCBC',  // Light Gray (Subtext)
+  switchButtonBackgroundColor: '#5A5A5A'
 };
 
 export const LIGHTCOLORS = {
+  dark: 0,
   primary: '#EAEAEA',  // Light Gray (Opposite of Deep Black)
   secondary: '#F5F5F5', // Soft White (Opposite of Dark Gray)
+  menuIconColor: '#000000',
+  menuBackgroundColor: '#FAFAFA',
+  forgotPassword: '#DADADA',
+  forgotPasswordColor: '#000000',
   backgroundColor: '#FFFFFF', // Pure White (Opposite of Deep Black)
   lightBackgroundColor: '#DADADA', // Light Gray (Opposite of Darker Background)
   highlight: '#0057B7',  // Deep Blue (Opposite of Royal Blue for balance)
   textPrimary: '#000000',  // Black (Opposite of White Text)
   textSecondary: '#4D4D4D',  // Dark Gray (Opposite of Light Gray Subtext)
+  switchButtonBackgroundColor: '#DADADA'
 };
+
 export const FONT = {
   ten: 10,
   eleven: 11,
@@ -80,10 +93,9 @@ export const TEXTINPUTDARK = {
 
 export const PLACEHOLDERCOLOR = '#585858'
 
-export const BUTTON = {
+export const LIGHTBUTTON = {
   width: '100%',
   height: 40,
-  color: '#FFFFFF',
   backgroundColor: '#000000',
   marginBottom: 10,
   borderRadius: 5,
@@ -92,7 +104,31 @@ export const BUTTON = {
   alignItems: 'center',
 }
 
-export const BUTTONTEXT = {
+export const DARKBUTTON = {
+  width: '100%',
+  height: 40,
+  backgroundColor: '#ffffff',
+  marginBottom: 10,
+  borderRadius: 5,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+}
+
+export const SECONDBUTTON = {
+  width: '100%',
+  height: 40,
+  backgroundColor: 'transparent',
+  marginBottom: 10,
+  borderRadius: 5,
+}
+
+export const DARKBUTTONTEXT = {
+  color: '#000000',
+  fontSize: 15,
+}
+
+export const LIGHTBUTTONTEXT = {
   color: '#ffffff',
   fontSize: 15,
 }
@@ -120,6 +156,7 @@ export const SIZES = {
   twenty: 20,
   twentyFive: 25,
   thirty: 30,
+  thirtyFive: 35,
   fourty: 40,
   fifty: 50,
   fiftyFive: 55,
@@ -131,8 +168,14 @@ export const SIZES = {
   eightyFive: 85,
   ninety: 90,
   ninetyFive: 95,
-  oneHundred: 100
+  oneHundred: 100,
+  twoHundred: 200,
+  twoHundredAndFifty: 250,
+  threeHundred: 300,
+  threeHundredAndFifty: 350,
+  fourHundred: 400,
+  fiveHundred: 500,
 };
 
 
-export default { BUTTON, BUTTONTEXT, LIGHTCOLORS, DARKCOLORS, PLACEHOLDERCOLOR, FONT, SIZES, TEXTINPUTDARK };
+export default { LIGHTBUTTON, LIGHTBUTTONTEXT, LIGHTCOLORS, DARKCOLORS, PLACEHOLDERCOLOR, FONT, SIZES, TEXTINPUTDARK };

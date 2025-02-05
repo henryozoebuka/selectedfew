@@ -1,16 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View, ScrollView } from 'react-native'
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { SIZES } from '../../styles/styles.js';
 import Footer from '../../components/Footer/Footer.jsx';
 
 const Event = () => {
-  return (
-    <View>
-      <Text>Event</Text>
-      <Footer />
-    </View>
-  )
+    const colors = useSelector((state) => state.colors);
+
+    return (
+        <View style={{ flex: 1, backgroundColor: colors.backgroundColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ScrollView style={{ width: '90%', maxWidth: 500, marginVertical: SIZES.twenty }}>
+                <Text style={{fontSize: SIZES.twenty, color: colors.textPrimary}}>Event Heading</Text>
+                <Text style={{fontSize: SIZES.twenty, color: colors.textPrimary}}>Event Body
+                  I don't know of it will work well like this.
+
+                  Then men.
+                </Text>
+            </ScrollView>
+            <Footer />
+        </View >
+    )
 }
 
-export default Event
-
-const styles = StyleSheet.create({})
+export default Event;

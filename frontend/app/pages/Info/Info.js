@@ -1,15 +1,12 @@
 import { Image, Text, View, Pressable, ScrollView } from 'react-native'
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Entypo from '@expo/vector-icons/Entypo';
-import { BUTTON, BUTTONTEXT, PLACEHOLDERCOLOR, TEXTINPUT, SIZES, FONT } from '../../styles/styles.js';
-import { useNavigation } from '@react-navigation/native';
+import { SIZES, FONT } from '../../styles/styles.js';
 import Image1 from '../../../assets/images/favicon.png';
 import Footer from '../../components/Footer/Footer.jsx';
 
 const Info = () => {
     const colors = useSelector((state) => state.colors);
-    const navigation = useNavigation();
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.backgroundColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

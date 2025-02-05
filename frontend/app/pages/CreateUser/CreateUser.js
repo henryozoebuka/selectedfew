@@ -1,12 +1,13 @@
 import { Text, View, Pressable, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BUTTON, PLACEHOLDERCOLOR, TEXTINPUT, SIZES, BUTTONTEXT, FONT } from '../../styles/styles.js';
+import { PLACEHOLDERCOLOR, SIZES, BUTTONTEXT, FONT } from '../../styles/styles.js';
 import { useNavigation } from '@react-navigation/native';
 import Footer from '../../components/Footer/Footer.jsx';
 
 const CreateUser = () => {
   const colors = useSelector((state) => state.colors);
+  const button = useSelector((state) => state.button);
   const textInput = useSelector((state) => state.textInput);
   const navigation = useNavigation();
   const [gender, setGender] = useState('');
@@ -59,7 +60,7 @@ const CreateUser = () => {
                 <Text style={{ color: colors.textSecondary, fontSize: FONT.fifteen }}>Female</Text>
               </Pressable>
             </View>
-            <Pressable style={BUTTON} >
+            <Pressable style={button} >
               <Text style={BUTTONTEXT}>Submit</Text>
             </Pressable>
             <Pressable style={{ marginBottom: SIZES.thirty }} onPress={() => { navigation.navigate('login') }}>
