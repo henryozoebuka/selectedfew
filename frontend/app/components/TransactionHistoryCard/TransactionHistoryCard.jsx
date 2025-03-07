@@ -3,16 +3,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { SIZES, FONT } from '../../styles/styles';
 
-const TransactionHistoryCard = ({ title, body, action }) => {
+const TransactionHistoryCard = ({ sender, receiver, amount, action }) => {
     const colors = useSelector((state) => state.colors);
     return (
         <Pressable onPress={action} style={{ backgroundColor: colors.lightBackgroundColor, borderRadius: SIZES.ten, marginBottom: SIZES.ten }}>
             <View style={{ width: '90%', alignSelf: 'center', marginVertical: SIZES.five, display: 'flex', alignItems: 'center', flexDirection: 'row', gap: SIZES.ten }}>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: colors.textPrimary, fontSize: FONT.fifteen, fontWeight: 'bold', marginBottom: SIZES.ten }}>{title.length > 35 ? title.slice(0, 35) + '...' : title}</Text>
-                    <Text style={{ color: colors.textPrimary }}>
-                        {body.length > 70 ? body.slice(0, 70) + '...' : body}
-                    </Text>
+                    <Text style={{ color: colors.textPrimary, fontSize: FONT.fifteen, marginBottom: SIZES.ten }}>Sender: {sender}</Text>
+                    <Text style={{ color: colors.textPrimary, fontSize: FONT.fifteen, marginBottom: SIZES.ten }}>Receiver: {receiver}</Text>
+                    <Text style={{ color: colors.textPrimary, fontSize: FONT.fifteen, marginBottom: SIZES.ten }}>₦{amount}</Text>
                 </View>
             </View>
         </Pressable>

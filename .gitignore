@@ -1,5 +1,8 @@
 node_modules/
 .expo/
+.env
+.env/
 .expo-shared/
 .vscode/
 .DS_Store
+postModel.js

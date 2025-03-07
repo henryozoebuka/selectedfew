@@ -1,11 +1,18 @@
 export const DARKCOLORS = {
   dark: 1,
+  lightRed: '#FF9999',
+  lightGreen: '#99FF99',
   primary: '#161616',  // Deep Black (Main Theme)
   secondary: '#1E1E1E', // Dark Gray (Modern Touch)
   menuIconColor: '#FFFFFF',
+  success: 'green',
+  failure: '#FF9999',
+  date: '#ffffff',
+  modalBackgroundColor: 'rgba(255, 255, 255, 0.5)',
   forgotPassword: '#9A9A9A',
   forgotPasswordColor: '#FFFFFF',
   menuBackgroundColor: '#4C4C4C',
+  buttonColor: '#000000',
   backgroundColor: '#0E0E0E', // Deep Black (Clean & Elegant)
   lightBackgroundColor: '#2A2A2A',
   highlight: '#1E88E5',  // Royal Blue (For Interactions)
@@ -16,10 +23,17 @@ export const DARKCOLORS = {
 
 export const LIGHTCOLORS = {
   dark: 0,
+  lightRed: '#FF9999',
+  lightGreen: '#99FF99',
   primary: '#EAEAEA',  // Light Gray (Opposite of Deep Black)
   secondary: '#F5F5F5', // Soft White (Opposite of Dark Gray)
   menuIconColor: '#000000',
   menuBackgroundColor: '#FAFAFA',
+  buttonColor: '#FFFFFF',
+  success: '#99FF99',
+  failure: 'red',
+  date: '#A0A0A0',
+  modalBackgroundColor: 'rgba(0, 0, 0, 0.5)',
   forgotPassword: '#DADADA',
   forgotPasswordColor: '#000000',
   backgroundColor: '#FFFFFF', // Pure White (Opposite of Deep Black)
@@ -169,6 +183,7 @@ export const SIZES = {
   ninety: 90,
   ninetyFive: 95,
   oneHundred: 100,
+  oneHundredAndFifty: 150,
   twoHundred: 200,
   twoHundredAndFifty: 250,
   threeHundred: 300,

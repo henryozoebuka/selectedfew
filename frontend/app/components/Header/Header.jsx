@@ -1,70 +1,68 @@
-import { Pressable, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import { Pressable, Text, View, ActivityIndicator, useWindowDimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import { setDarkMode, setLightMode } from '../../redux/slices/colorsSlice.js';
-import { setTextInputLight, setTextInputDark } from '../../redux/slices/textInputSlice.js';
+import { toggleMenu } from '../../redux/slices/menuSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDarkButton, setLightButton } from '../../redux/slices/buttonSlice.js';
-import { setDarkButtonText, setLightButtonText } from '../../redux/slices/buttonTextSlice.js';
 import { FONT, SIZES } from '../../styles/styles.js';
+import Menu from '../Menu/Menu.jsx';
+import LightDarkSwitch from '../LightDarkSwitch/LightDarkSwitch.jsx';
+import { setUser } from '../../redux/slices/userSlice.js';
 
 const Header = () => {
     const colors = useSelector((state) => state.colors);
-    const dispatch = useDispatch();
-    const menuItems = ['announcement', 'add-announcement', 'announcements', 'forgot-password', 'confirm-otp', 'event', 'add-event', 'events', 'minutes', 'add-minutes', 'minutes-archives', 'admin-transaction-history', 'transaction-history', 'user', 'admin-user', 'users', 'login', 'create-user', 'info',];
+    const user = useSelector((state) => state.user);
+    const menu = useSelector((state) => state.menu);
+    const loading = useSelector((state) => state.loading);
+    const success = useSelector((state) => state.success);
+    const failure = useSelector((state) => state.failure);
+    // const menuItems = [ 'admin-events', 'admin-announcements', 'admin-minutes-archive', 'test', 'login', 'add-announcement', 'announcements', 'create-user', 'add-event', 'events', 'minutes-archive', 'add-minutes', 'admin-transaction-history', 'transaction-history', 'user', 'admin-user', 'users', 'info',];
     const navigation = useNavigation();
-    const [menu, setMenu] = useState(false);
+    const dispatch = useDispatch();
 
-    // light color mode
-    const lightMode = () => {
-        dispatch(setLightMode());
-        dispatch(setTextInputLight());
-        dispatch(setLightButton());
-        dispatch(setLightButtonText());
-    }
-
-    //dark color mode
-    const darkMode = () => {
-        dispatch(setDarkMode());
-        dispatch(setTextInputDark());
-        dispatch(setDarkButton());
-        dispatch(setDarkButtonText());
-    }
-
-    //display menu
-    const showMenu = () => {
-        setMenu(!menu);
-    }
+    const { height: screenHeight, width: screenWidth } = useWindowDimensions();
 
     return (
-        <View style={{backgroundColor: colors.menuBackgroundColor}}>
-            <View style={{ alignSelf: 'center', width: '90%', marginTop: SIZES.ten, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-               {menu ? <AntDesign name="close" size={SIZES.thirty} color={colors.menuIconColor} onPress={() => { showMenu(); }} /> : <Feather name="menu" size={SIZES.thirty} color={colors.menuIconColor} onPress={() => { showMenu(); }} />} 
+        <View style={{ backgroundColor: colors.menuBackgroundColor, minHeight: SIZES.fifty, borderBottomColor: colors.textPrimary, borderBottomWidth: .5 }}>
+            <View style={{ alignSelf: 'center', width: '90%', marginTop: SIZES.ten, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <LightDarkSwitch />
+                {user && user.firstname &&
+                    <View style={{ flexDirection: 'row', columnGap: SIZES.fifty, alignItems: 'center', justifyContent: 'center' }}>
+                        <Pressable onPress={() => { dispatch(setUser({})); navigation.navigate('login') }}>
+                            <Text style={{ color: colors.textPrimary }}>Logout</Text>
+                        </Pressable>
 
+                        {menu ? <AntDesign name="close" size={SIZES.thirty} color={colors.menuIconColor} onPress={() => { dispatch(toggleMenu()) }} /> : <Feather name="menu" size={SIZES.thirty} color={colors.menuIconColor} onPress={() => { dispatch(toggleMenu()); }} />}
+                    </View>
+                }
             </View>
             {
-                menu &&
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', position: 'absolute', top: SIZES.fourty, left: 0, right: 0, height: 800, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                    <View style={{ display: 'flex', gap: 5, minWidth: SIZES.twoHundredAndFifty, backgroundColor: colors.menuBackgroundColor }}>
-                        {
-                            menuItems && menuItems.length ? menuItems.map((item, index) => (
-                                <Pressable style={{marginHorizontal: SIZES.ten}} key={index} onPress={() => { navigation.navigate(item) }}>
-                                    <Text style={{fontSize: FONT.twenty, color: colors.textPrimary}}>{item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</Text>
-                                </Pressable>
-                            )) : null
-                        }
-                        <View>
-                            <Pressable onPress={() => { lightMode(); }} style={{ margin: 10, backgroundColor: '#000000' }}>
-                                <Text style={{ marginVertical: 10, color: '#ffffff' }}>Light Mode</Text>
-                            </Pressable>
-                            <Pressable onPress={() => { darkMode(); }} style={{ margin: 10, backgroundColor: '#000000' }}>
-                                <Text style={{ marginVertical: 10, color: '#ffffff' }}>Dark Mode</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </View>
+                menu && <Menu />
+            }
+            {
+                success ?
+                    <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.success, height: screenHeight, width: screenWidth }}>
+                        <Text style={{ color: colors.textPrimary, fontWeight: 'bold', fontSize: SIZES.twenty, flexWrap: 'wrap', width: '90%', textAlign: 'center' }}>{success}</Text>
+                    </View> :
+                    null
+            }
+
+            {
+                failure ?
+                    <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.failure, height: screenHeight, width: screenWidth }}>
+                        <Text style={{ color: colors.textPrimary, fontWeight: 'bold', fontSize: SIZES.twenty, flexWrap: 'wrap', width: '90%', textAlign: 'center' }}>{failure}</Text>
+                    </View> :
+                    null
+            }
+
+            {
+                loading ?
+                    <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', height: screenHeight, width: screenWidth }}>
+                        <Text style={{ color: colors.textPrimary }}>Please wait...</Text>
+                        <ActivityIndicator color={'green'} size={SIZES.fifty} />
+                    </View> :
+                    null
             }
         </View>
     )

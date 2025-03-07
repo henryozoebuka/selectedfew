@@ -1,24 +1,113 @@
 import { Image, Text, View, Pressable, ScrollView } from 'react-native'
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { SIZES, FONT } from '../../styles/styles.js';
-import Image1 from '../../../assets/images/favicon.png';
 import Footer from '../../components/Footer/Footer.jsx';
-import SwitchButton from '../../components/SwitchButton/SwitchButton.jsx';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { setAnnouncement } from '../../redux/slices/announcementSlice.js';
+import Entypo from '@expo/vector-icons/Entypo';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import moment from 'moment';
+import { setLoading } from '../../redux/slices/loadingSlice.js';
+import axios from 'axios';
+import { setSuccess } from '../../redux/slices/successSlice.js';
+import { setFailure } from '../../redux/slices/failureSlice.js';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
+import PageTitle from '../../components/PageTitle/PageTitle.jsx';
 
 const Announcement = () => {
     const colors = useSelector((state) => state.colors);
+    const user = useSelector((state) => state.user);
+    const serverURL = useSelector((state) => state.serverURL);
+    const announcement = useSelector((state) => state.announcement);
+    const announcements = useSelector((state) => state.announcements);
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
+    const route = useRoute();
+    const { id } = route.params;
 
+    const [modal, setModal] = useState(false);
+
+    const toggleDeleteModal = () => {
+        setModal(!modal);
+    }
+
+    // Delete announcement
+    const deleteAnnouncement = async () => {
+        try {
+            dispatch(setLoading(true));
+            const response = await axios.delete(`${serverURL}/delete-announcement`, { data: { announcement: announcement._id } })
+            if (response && response.status === 200) {
+                dispatch(setSuccess(response.data.message));
+                navigation.navigate('announcements');
+                setModal(false);
+                setTimeout(() => {
+                    dispatch(setSuccess(''));
+                }, 3000);
+            }
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                dispatch(setFailure(error.response.data.message));
+                setTimeout(() => {
+                    dispatch(setFailure(''));
+                }, 5000);
+            }
+            console.error(error);
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+    useEffect(() => {
+        if (announcements) {
+            const individualAnnouncement = announcements.find(item => item._id === id);
+            if (individualAnnouncement) {
+                dispatch(setAnnouncement(individualAnnouncement));
+            }
+        }
+    }, [announcements])
+
+    if (modal) {
+        return <ConfirmationModal question={'Are you sure that you want to delete this announcement?'} action={deleteAnnouncement} displayModal={modal} toggle={() => { toggleDeleteModal(); }} />
+    }
     return (
         <View style={{ flex: 1, backgroundColor: colors.backgroundColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PageTitle name={'Announcement'} />
+            <View style={{ display: 'flex', maxWidth: 500, flexDirection: 'row', width: '90%', justifyContent: 'flex-end', marginTop: SIZES.twenty }}>
+                {(user?.role === 'chairman' || user?.role === 'secretary') &&
+                    <View style={{ flexDirection: 'row', columnGap: SIZES.twenty }}>
+                        <MaterialIcons name="delete" size={SIZES.twentyFive} color={colors.textPrimary} onPress={() => { toggleDeleteModal(); }} />
+                        <FontAwesome name="edit" size={SIZES.twentyFive} color={colors.textPrimary} onPress={() => { navigation.navigate('edit-announcement') }} />
+                    </View>
+                }
+            </View>
             <ScrollView style={{ width: '90%', maxWidth: 500, marginVertical: SIZES.twenty }}>
-                <Text style={{fontSize: SIZES.twenty, color: colors.textPrimary}}>Announcement Heading</Text>
-                <Text style={{fontSize: SIZES.twenty, color: colors.textPrimary}}>Announcement Body
-                  I don't know of it will work well like this.
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: SIZES.twenty, marginBottom: SIZES.twenty }}>
+                    <Entypo name="user" size={SIZES.twentyFive} color={colors.textPrimary} />
+                    <View>
+                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{ fontSize: FONT.ten, color: colors.textPrimary }}>Posted by:  </Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: FONT.ten, color: colors.date }}>{announcement.author?.firstname + " " + announcement.author?.lastname}</Text>
+                        </View>
 
-                  Then men.
-                </Text>
+                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{ fontSize: FONT.ten, color: colors.textPrimary }}>On:  </Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: FONT.ten, color: colors.date }}>{moment(announcement.createdAt).format('MMMM D, YYYY')}</Text>
+                        </View>
+
+                        {
+                            announcement && announcement.updatedAt &&
+                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={{ fontSize: FONT.ten, color: colors.textPrimary }}>Last edited on:  </Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: FONT.ten, color: colors.date }}>{moment(announcement.updatedAt).format('MMMM D, YYYY')}</Text>
+                            </View>
+                        }
+                    </View>
+                </View>
+                <View style={{ height: SIZES.two, width: '100%', backgroundColor: '#EAEAEA', marginBottom: SIZES.ten }}></View>
+                <Text style={{ fontSize: SIZES.twenty, color: colors.textPrimary, fontSize: FONT.twenty, fontWeight: 'bold', marginBottom: SIZES.ten }}>{announcement && announcement.title}</Text>
+                <View style={{ height: SIZES.two, width: '100%', backgroundColor: '#EAEAEA', marginBottom: SIZES.ten }}></View>
+                <Text style={{ fontSize: SIZES.twenty, color: colors.textPrimary }}>{announcement && announcement.body}</Text>
             </ScrollView>
             <Footer />
         </View >

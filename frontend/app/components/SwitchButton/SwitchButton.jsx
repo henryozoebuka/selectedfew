@@ -38,7 +38,7 @@ const SwitchButton = () => {
         }
         
   return (
-    <Pressable onPress={() => {toggleSwitchButton();}}>
+    <Pressable onPress={() => {toggleSwitchButton();}} style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
       <View style={{ height: SIZES.ten, width: SIZES.thirtyFive, borderRadius: 100, backgroundColor: colors.dark === 1 ? 'lightblue': colors.switchButtonBackgroundColor}}>
         <View style={{height: SIZES.twenty, width: SIZES.twenty, borderRadius: 100, backgroundColor: colors.dark === 1 ? 'blue': colors.textPrimary, position: 'absolute', top: -5, right: colors.dark === 1 ? 0: ''}}></View>
       </View>
