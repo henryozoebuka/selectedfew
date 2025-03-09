@@ -12,7 +12,7 @@ import Announcements from './pages/Announcements/Announcements.js';
 import AddAnnouncement from './pages/AddAnnouncement/AddAnnouncement.js';
 import AddPayment from './pages/AddPayment/AddPayment.js';
 import AdminPayments from './pages/AdminPayments/AdminPayments.js';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Payments from './pages/Payments/Payments.js';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword.js';
 import ConfirmOTP from './pages/ConfirmOTP/ConfirmOTP.js';
@@ -48,7 +48,7 @@ import AdminPayment from './pages/AdminPayment/AdminPayment.js';
 import ApproveClubTransfer from './pages/ApproveClubTransfer/ApproveClubTransfer.js';
 import ViewTransactionHistory from './pages/ViewTransactionHistory/ViewTransactionHistory.js';
 import AdminViewTransactionHistory from './pages/AdminViewTransactionHistory/AdminViewTransactionHistory.js';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import PaymentApproval from './pages/PaymentApproval/PaymentApproval.js';
 
@@ -57,17 +57,16 @@ const Stack = createStackNavigator();
 
 const MyStacks = () => {
     const user = useSelector((state) => state.user);
-    const navigation = useNavigation();
 
     
     return (
         <Stack.Navigator initialRouteName="login">
                     <Stack.Screen name="login" component={Login} options={{ header: () => <Header /> }} />
+                    <Stack.Screen name="forgot-password" component={ForgotPassword} options={{ header: () => <Header /> }} />
             {user && (
                 <>
             <Stack.Screen name="create-user" component={CreateUser} options={{ header: () => <Header /> }} />
             <Stack.Screen name="info" component={Info} options={{ header: () => <Header /> }} />
-            <Stack.Screen name="forgot-password" component={ForgotPassword} options={{ header: () => <Header /> }} />
             <Stack.Screen name="confirm-otp" component={ConfirmOTP} options={{ header: () => <Header /> }} />
             <Stack.Screen name="announcement" component={Announcement} options={{ header: () => <Header /> }} />
             <Stack.Screen name="add-announcement" component={AddAnnouncement} options={{ header: () => <Header /> }} />

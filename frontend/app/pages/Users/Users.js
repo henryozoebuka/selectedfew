@@ -11,6 +11,7 @@ import { setLoading } from '../../redux/slices/loadingSlice.js';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Users = () => {
     const colors = useSelector((state) => state.colors);
@@ -24,6 +25,7 @@ const Users = () => {
     //delete user
     const deleteUser = async (userId) => {
         try {
+            dispatch(setLoadingInfo('Deleting user account.'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-user/${userId}`);
             if (response && response.status === 200) {
@@ -47,6 +49,7 @@ const Users = () => {
         //fetch users
         const fetchUsers = async () => {
             try {
+                dispatch(setLoadingInfo('Fetching users.'));
                 dispatch(setLoading(true));
                 const response = await axios.get(`${serverURL}/users`);
                 if (response && response.status === 200) {
@@ -76,7 +79,7 @@ const Users = () => {
                 <View style={{ width: '90%', alignSelf: 'center', marginBottom: SIZES.twenty }}>
                     {users && users.length ?
                         users.map((user, index) => (
-                            <MemberCard key={user._id || index} image={user.photo || Image1} memberName={user.firstname + ' ' + user.lastname} role={user.role || 'No role assigned yet'} imageAlt={user.firstname} deleteUser={() => { deleteUser(user._id); }} action={() => {navigation.navigate("admin-user", { id: user._id });}} />
+                            <MemberCard key={user._id || index} image={user.photo} memberName={user.firstname + ' ' + user.lastname} role={user.role || 'No role assigned yet'} imageAlt={user.firstname} action={() => {navigation.navigate("admin-user", { id: user._id });}} />
                         ))
                         : null}
                 </View>

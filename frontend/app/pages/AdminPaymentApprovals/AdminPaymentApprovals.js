@@ -9,6 +9,7 @@ import Footer from '../../components/Footer/Footer.jsx';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { setPaymentApprovals } from '../../redux/slices/paymentApprovalsSlice.js';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminPaymentApprovals = () => {
   const colors = useSelector((state) => state.colors);
@@ -20,6 +21,7 @@ const AdminPaymentApprovals = () => {
   // Fetch announcements
   const fetchPaymentApprovals = async () => {
     try {
+      dispatch(setLoadingInfo('Fetching payments'));
       dispatch(setLoading(true));
       const response = await axios.get(`${serverURL}/payment-approvals`);
       if (response && response.status === 200) {

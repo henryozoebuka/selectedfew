@@ -12,6 +12,7 @@ import Footer from '../../components/Footer/Footer.jsx';
 import Button from '../../components/Button/Button.jsx';
 import { setUser } from '../../redux/slices/userSlice.js';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 
 const TransferFund = () => {
@@ -46,6 +47,7 @@ const TransferFund = () => {
         }
 
         try {
+            dispatch(setLoadingInfo('Transferring fund.'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/transfer-fund`, data);
             if (response && response.status === 200) {
@@ -71,6 +73,7 @@ const TransferFund = () => {
 
     const fetchReceiver = async () => {
         try {
+            dispatch(setLoadingInfo("Confirming receiver's account."));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/fetch-receiver`, { accountNumber: data.accountNumber });
             if (response && response.status === 200) {

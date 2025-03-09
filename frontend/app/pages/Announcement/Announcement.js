@@ -15,6 +15,7 @@ import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Announcement = () => {
     const colors = useSelector((state) => state.colors);
@@ -36,11 +37,12 @@ const Announcement = () => {
     // Delete announcement
     const deleteAnnouncement = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting announcement.'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-announcement`, { data: { announcement: announcement._id } })
             if (response && response.status === 200) {
                 dispatch(setSuccess(response.data.message));
-                navigation.navigate('announcements');
+                navigation.navigate('admin-announcements');
                 setModal(false);
                 setTimeout(() => {
                     dispatch(setSuccess(''));

@@ -10,6 +10,7 @@ import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import Footer from '../../components/Footer/Footer.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const EditMinutes = () => {
 
@@ -19,6 +20,7 @@ const EditMinutes = () => {
     const serverURL = useSelector((state) => state.serverURL);
     const textInput = useSelector((state) => state.textInput);
     const [data, setData] = useState({
+        author: user?._id || '',
         minutesId: '',
         title: '',
         body: '',
@@ -43,6 +45,7 @@ const EditMinutes = () => {
 
     const handleSubmit = async () => {
         try {
+            dispatch(setLoadingInfo('Updating minutes'));
             dispatch(setLoading(true));
             const response = await axios.patch(`${serverURL}/edit-minutes/${user._id}`, data);
             if (response && response.status === 200) {
@@ -66,6 +69,7 @@ const EditMinutes = () => {
 
     useEffect(() => {
         setData({
+            author: user._id || '',
             minutesId: minutes._id || '',
             title: minutes.title || '',
             body: minutes.body || '',

@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SIZES, FONT } from '../../styles/styles.js';
 import axios from 'axios';
+import moment from 'moment';
 import Image1 from '../../../assets/images/favicon.png';
 import Footer from '../../components/Footer/Footer.jsx';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +18,7 @@ import AnnouncementCard from '../../components/AnnouncementCard/AnnouncementCard
 import EventCard from '../../components/EventCard/EventCard.jsx';
 import MinutesCard from '../../components/MinutesCard/MinutesCard.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Info = () => {
     const serverURL = useSelector((state) => state.serverURL);
@@ -32,6 +34,7 @@ const Info = () => {
     //fetct users
     const fetchUsers = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching info.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/users`);
             if (response && response.status === 200) {
@@ -141,11 +144,11 @@ const Info = () => {
                     {announcements && announcements.length ? (
                         [...announcements].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 2).map((announcement, index) => (
                             <View key={announcement._id || index} style={{ width: '100%', flexDirection: 'row', columnGap: SIZES.ten, alignItems: 'center', marginBottom: 10 }}>
-                                <AnnouncementCard title={announcement.title} body={announcement.body} action={() => { navigation.navigate('announcement', { id: announcement._id }) }} />
+                                <AnnouncementCard title={announcement.title} body={announcement.body} postDate={moment(announcement.createdAt).format('MMMM D, YYYY')} action={() => { navigation.navigate('announcement', { id: announcement._id }) }} />
                             </View>
                         ))
                     ) : (
-                        <Text>Null</Text>
+                        <Text>No Recent Announcements</Text>
                     )}
                 </View>
 
@@ -155,11 +158,11 @@ const Info = () => {
                     {events && events.length ? (
                         [...events].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 2).map((event, index) => (
                             <View key={event._id || index} style={{ width: '100%', flexDirection: 'row', columnGap: SIZES.ten, alignItems: 'center', marginBottom: 10 }}>
-                                <EventCard title={event.title} body={event.body} action={() => { navigation.navigate('event', { id: event._id }) }} />
+                                <EventCard title={event.title} body={event.body} postDate={moment(event.createdAt).format('MMMM D, YYYY')} action={() => { navigation.navigate('event', { id: event._id }) }} />
                             </View>
                         ))
                     ) : (
-                        <Text>Null</Text>
+                        <Text>No Recent Events.</Text>
                     )}
                 </View>
 
@@ -169,11 +172,11 @@ const Info = () => {
                     {minutesArchive && minutesArchive.length ? (
                         [...minutesArchive].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 2).map((minutes, index) => (
                             <View key={minutes._id || index} style={{ width: '100%', flexDirection: 'row', columnGap: SIZES.ten, alignItems: 'center', marginBottom: 10 }}>
-                                    <MinutesCard title={minutes.title} body={minutes.body} action={() => { navigation.navigate('minutes', { id: minutes._id })}}/>
+                                    <MinutesCard title={minutes.title} body={minutes.body} postDate={moment(minutes.createdAt).format('MMMM D, YYYY')} action={() => { navigation.navigate('minutes', { id: minutes._id })}}/>
                             </View>
                         ))
                     ) : (
-                        <Text>Null</Text>
+                        <Text>No Recent Minutes</Text>
                     )}
                 </View>
 
@@ -182,7 +185,7 @@ const Info = () => {
                     <Text style={{ color: colors.textPrimary, fontSize: FONT.twentyFive }}>Members</Text>
                     {users && users.length ?
                         users.map((user, index) => (
-                            <MemberCard key={user._id || index} image={user.photo || Image1} memberName={user.firstname + ' ' + user.lastname} role={user.role || 'No role assigned yet'}/>
+                            <MemberCard key={user._id || index} image={user.photo} memberName={user.firstname + ' ' + user.lastname} role={user.role || 'No role assigned yet'} action={() => {navigation.navigate("admin-user", { id: user._id })}}/>
                         ))
                         : null}
                 </View>

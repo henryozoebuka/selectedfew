@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import serverless from 'serverless-http';
+// import serverless from 'serverless-http';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRouter from './routes/userRoutes.js';
@@ -35,15 +35,15 @@ app.use('/', paymentRouter);
 app.use('/', paymentApprovalRouter);
 app.use('/', transactionHistoryRouter);
 
-// const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
-const startServer = () => {
+const startServer = async () => {
     try {
-        mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect(process.env.MONGO_URI);
         console.log('connected to database');
-        // app.listen(PORT, () => {
-        //     console.log(`Connected on port ${PORT}`);
-        // })
+        app.listen(PORT, () => {
+            console.log(`Connected on port ${PORT}`);
+        })
     } catch (error) {
         console.error(error);
     }
@@ -51,4 +51,4 @@ const startServer = () => {
 
 startServer();
 
-export const handler = serverless(app);
+// export const handler = serverless(app);

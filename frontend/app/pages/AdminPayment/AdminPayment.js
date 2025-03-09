@@ -13,6 +13,7 @@ import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminPayment = () => {
     const colors = useSelector((state) => state.colors);
@@ -35,6 +36,7 @@ const AdminPayment = () => {
     // Delete payment
     const deletePayment = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting payment.'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-payment/${payment._id}`)
             if (response && response.status === 200) {

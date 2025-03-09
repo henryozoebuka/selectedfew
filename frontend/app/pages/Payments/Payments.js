@@ -11,6 +11,7 @@ import PaymentCard from '../../components/PaymentCard/PaymentCard.jsx';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Payments = () => {
     const colors = useSelector((state) => state.colors);
@@ -23,6 +24,7 @@ const Payments = () => {
     // Fetch announcements
     const fetchPayments = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching payments.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/user-payments/${user._id}`);
             if (response && response.status === 200) {

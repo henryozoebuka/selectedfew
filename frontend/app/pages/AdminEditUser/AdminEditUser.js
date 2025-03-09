@@ -11,6 +11,7 @@ import { setLoading } from '../../redux/slices/loadingSlice.js';
 import Footer from '../../components/Footer/Footer.jsx';
 import Button from '../../components/Button/Button.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminEditUser = () => {
     const serverURL = useSelector((state) => state.serverURL);
@@ -53,6 +54,7 @@ const AdminEditUser = () => {
         }
 
         try {
+            dispatch(setLoadingInfo('Updating user information.'));
             dispatch(setLoading(true));
             const response = await axios.patch(`${serverURL}/edit-user/${adminUser._id}`, data);
             if (response && response.status === 200) {

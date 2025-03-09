@@ -8,6 +8,8 @@ import { setLoading } from '../../redux/slices/loadingSlice.js';
 import axios from 'axios';
 import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
+import Footer from '../../components/Footer/Footer.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const EditAnnouncement = () => {
 
@@ -17,6 +19,7 @@ const EditAnnouncement = () => {
     const serverURL = useSelector((state) => state.serverURL);
     const textInput = useSelector((state) => state.textInput);
     const [data, setData] = useState({
+        author: user._id || '',
         announcementId: '',
         title: '',
         body: '',
@@ -42,6 +45,7 @@ const EditAnnouncement = () => {
 
     const handleSubmit = async () => {
         try {
+            dispatch(setLoadingInfo('Updating announcement.'));
             dispatch(setLoading(true));
             const response = await axios.patch(`${serverURL}/edit-announcement/${user._id}`, data);
             if (response && response.status === 200) {
@@ -66,6 +70,7 @@ const EditAnnouncement = () => {
 
     useEffect(() => {
         setData({
+            author: user._id || '',
             announcementId: announcement._id || '',
             title: announcement.title || '',
             body: announcement.body || '',
@@ -98,6 +103,7 @@ const EditAnnouncement = () => {
                 </View>
                 <Button title={'Update'} action={handleSubmit} />
             </ScrollView>
+            <Footer />
         </View>
     )
 }

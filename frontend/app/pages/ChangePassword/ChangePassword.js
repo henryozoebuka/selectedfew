@@ -11,6 +11,8 @@ import { setFailure } from '../../redux/slices/failureSlice.js';
 import { setLoading } from '../../redux/slices/loadingSlice.js';
 import axios from 'axios';
 import { setSuccess } from '../../redux/slices/successSlice.js';
+import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const ChangePassword = () => {
     const colors = useSelector((state) => state.colors);
@@ -51,6 +53,7 @@ const ChangePassword = () => {
         }
 
         try {
+            dispatch(setLoadingInfo('Changing password.'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/change-password`, data);
             if (response && response.status === 200) {
@@ -79,15 +82,15 @@ const ChangePassword = () => {
             <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '90%' }}>
                 <View style={{ marginBottom: SIZES.thirty, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
                     <Entypo name="lock" size={SIZES.twentyFive} color={colors.textPrimary} />
-                    <Text style={{ color: colors.textPrimary, fontSize: FONT.twentyFive }}>SELECTED FEW</Text>
+                    <PageTitle name={'Change Password'} />
                 </View>
                 <View style={{ display: 'flex', width: '90%', maxWidth: 500, backgroundColor: colors.lightBackgroundColor, borderRadius: 10 }}>
-                    <View style={{ width: '90%', marginTop: 20, alignSelf: 'center' }}>
-                        <Text style={{ color: colors.textPrimary, alignSelf: 'center', marginBottom: SIZES.twenty, fontSize: FONT.twenty }}>Change Password</Text>
+                    <View style={{ width: '90%', marginTop: SIZES.twentyFive, alignSelf: 'center' }}>
                         <TextInput style={textInput} placeholder='Enter new password' placeholderTextColor={PLACEHOLDERCOLOR} onChangeText={(value) => { handleChange(value, 'password') }} secureTextEntry />
                         <TextInput style={textInput} placeholder="Confirm new password" placeholderTextColor={PLACEHOLDERCOLOR} onChangeText={(value) => { handleChange(value, 'confirmPassword') }} secureTextEntry />
+                        <View style={{marginBottom: SIZES.twentyFive}}>
                         <Button title={'Change Password'} action={() => { handleSubmit() }} />
-                        <SecondButton title={'login'} action={() => { navigation.navigate('login'); }} />
+                        </View>
                     </View>
                 </View>
             </View>

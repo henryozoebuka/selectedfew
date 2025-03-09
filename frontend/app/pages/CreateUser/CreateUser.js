@@ -9,6 +9,8 @@ import { setFailure } from '../../redux/slices/failureSlice.js';
 import { setLoading } from '../../redux/slices/loadingSlice.js';
 import Footer from '../../components/Footer/Footer.jsx';
 import Button from '../../components/Button/Button.jsx';
+import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const CreateUser = () => {
   const serverURL = useSelector((state) => state.serverURL);
@@ -44,6 +46,7 @@ const CreateUser = () => {
     }
     
     try {
+      dispatch(setLoadingInfo('Creating user account.'));
       dispatch(setLoading(true));
       const response = await axios.post(`${serverURL}/create-user`, data);
       if (response && response.status === 200) {
@@ -69,11 +72,10 @@ const CreateUser = () => {
     <View style={{ flex: 1, backgroundColor: colors.backgroundColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '90%' }}>
         <View style={{ marginBottom: SIZES.thirty, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-          <Text style={{ color: colors.textPrimary, fontSize: FONT.twentyFive }}>SELECTED FEW</Text>
+          <PageTitle name={'Create User'} />
         </View>
         <View style={{ display: 'flex', width: '90%', maxWidth: 500, backgroundColor: colors.lightBackgroundColor, borderRadius: 10 }}>
-          <View style={{ width: '90%', alignSelf: 'center', marginTop: 10, }}>
-            <Text style={{ color: colors.textPrimary, alignSelf: 'center', marginBottom: SIZES.twenty, fontSize: FONT.twenty }}>Create User</Text>
+          <View style={{ width: '90%', alignSelf: 'center', marginTop: SIZES.twentyFive, }}>
             <TextInput onChangeText={(value) => { handleChange(value, 'firstname'); }} style={textInput} placeholder='Enter user firstname' placeholderTextColor={PLACEHOLDERCOLOR} />
             <TextInput onChangeText={(value) => { handleChange(value, 'lastname'); }} style={textInput} placeholder='Enter user lastname' placeholderTextColor={PLACEHOLDERCOLOR} />
             <TextInput onChangeText={(value) => { handleChange(value, 'email'); }} style={textInput} keyboardType="email-address" placeholder='Enter your email' placeholderTextColor={PLACEHOLDERCOLOR} />
@@ -93,10 +95,9 @@ const CreateUser = () => {
                 <Text style={{ color: colors.textSecondary, fontSize: FONT.fifteen }}>Female</Text>
               </Pressable>
             </View>
-            <Button title={'Submit'} action={() => {handleSubmit()}} />
-            <Pressable style={{ marginBottom: SIZES.thirty }} onPress={() => { navigation.navigate('login') }}>
-              <Text style={{ color: colors.textPrimary }}>Login</Text>
-            </Pressable>
+            <View style={{marginBottom: SIZES.twenty}}>
+            <Button title={'Submit'} action={() => {handleSubmit()}} />          
+            </View>
           </View>
         </View>
       </View>

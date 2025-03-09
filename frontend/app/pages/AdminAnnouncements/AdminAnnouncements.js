@@ -17,6 +17,7 @@ import Checkbox from 'expo-checkbox';
 import SecondButton from '../../components/SecondButton/SecondButton.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
 import moment from 'moment';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminAnnouncements = () => {
     const colors = useSelector((state) => state.colors);
@@ -32,6 +33,7 @@ const AdminAnnouncements = () => {
     // Fetch announcements
     const fetchAnnouncements = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching announcements.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/announcements`);
             if (response && response.status === 200) {
@@ -52,9 +54,11 @@ const AdminAnnouncements = () => {
     // Delete announcements
     const deletedAnnouncements = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting announcement(s)'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-announcements`, {data: {announcements: selectedAnnouncements}});
         if (response && response.status === 200) {
+            setSelectedAnnouncements([]);
             const currentAnnouncements = announcements.filter(prev => !selectedAnnouncements.includes(prev._id));
             dispatch(setAnnouncements(currentAnnouncements));
             dispatch(setSuccess(response.data.message));
@@ -89,7 +93,6 @@ const AdminAnnouncements = () => {
         } else {
             setSelectedAnnouncements([...selectedAnnouncements, id]);
         }
-        console.log(selectedAnnouncements)
     };
 
     // Toggle delete modal

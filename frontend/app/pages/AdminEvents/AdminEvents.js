@@ -17,6 +17,7 @@ import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationMo
 import SecondButton from '../../components/SecondButton/SecondButton.jsx';
 import moment from 'moment';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminEvents = () => {
     const colors = useSelector((state) => state.colors);
@@ -32,6 +33,7 @@ const AdminEvents = () => {
     // Fetch announcements
     const fetchEvents = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching events.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/events`);
             if (response && response.status === 200) {
@@ -52,9 +54,11 @@ const AdminEvents = () => {
     // Delete announcements
     const deletedEvents = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting event(s).'))
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-events`, { data: { events: selectedEvents } });
             if (response && response.status === 200) {
+                setSelectedEvents([]);
                 const currentEvents = events.filter(prev => !selectedEvents.includes(prev._id));
                 dispatch(setEvents(currentEvents));
                 dispatch(setSuccess(response.data.message));

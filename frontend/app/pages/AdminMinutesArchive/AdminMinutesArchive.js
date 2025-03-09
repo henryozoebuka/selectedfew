@@ -17,6 +17,7 @@ import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationMo
 import Checkbox from 'expo-checkbox';
 import SecondButton from '../../components/SecondButton/SecondButton.jsx';
 import moment from 'moment';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminMinutesArchive = () => {
     const colors = useSelector((state) => state.colors);
@@ -32,6 +33,7 @@ const AdminMinutesArchive = () => {
     // Fetch minutes archive
     const fetchMinutesArchive = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching minutes archive.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/minutes-archive`);
             if (response && response.status === 200) {
@@ -52,9 +54,11 @@ const AdminMinutesArchive = () => {
     // Delete announcements
     const deletedMinutesArchive = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting minutes archive'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-minutes-archive`, {data: {minutesArchive: selectedMinutesArchive}});
         if (response && response.status === 200) {
+            setSelectedMinutesArchive([]);
             const currentMinutesArchive = minutesArchive.filter(prev => !selectedMinutesArchive.includes(prev._id));
             dispatch(setMinutesArchive(currentMinutesArchive));
             dispatch(setSuccess(response.data.message));

@@ -35,7 +35,7 @@ const fetchPosts = async (req, res) => {
 
     try {
         const posts = await PostModel.find()
-            .populate('author',);
+            .populate('author', 'firstname lastname');
         if (!posts) {
             return res.status(404).json({ message: 'No posts found.' })
         }

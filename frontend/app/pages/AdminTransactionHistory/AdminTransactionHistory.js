@@ -9,6 +9,7 @@ import Footer from '../../components/Footer/Footer.jsx';
 import { useNavigation } from '@react-navigation/native';
 import TransactionHistoryCard from '../../components/TransactionHistoryCard/TransactionHistoryCard.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminTransactionHistory = () => {
     const colors = useSelector((state) => state.colors);
@@ -19,6 +20,7 @@ const AdminTransactionHistory = () => {
 
     const fetchTransactionHistory = async () => {
         try {
+            dispatch(setLoadingInfo("Fetching users' transactions."));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/fetch-transaction-history`);
             if (response && response.status === 200) {

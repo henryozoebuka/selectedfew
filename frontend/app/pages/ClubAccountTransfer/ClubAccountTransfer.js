@@ -11,6 +11,8 @@ import { setLoading } from '../../redux/slices/loadingSlice.js';
 import Footer from '../../components/Footer/Footer.jsx';
 import Button from '../../components/Button/Button.jsx';
 import { setUser } from '../../redux/slices/userSlice.js';
+import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 
 const ClubAccountTransfer = () => {
@@ -42,6 +44,7 @@ const ClubAccountTransfer = () => {
         }
 
         try {
+            dispatch(setLoadingInfo('Requesting transferred fund approval.'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/request-admin-transfer-fund-approval`, data);
             if (response && response.status === 201) {
@@ -70,11 +73,10 @@ const ClubAccountTransfer = () => {
             <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', width: '100%' }} style={{ flex: 1, width: '100%', marginBottom: SIZES.fifty }}>
 
                 <View style={{ marginBottom: SIZES.thirty, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-                    <Text style={{ color: colors.textPrimary, fontSize: FONT.twentyFive }}>SELECTED FEW</Text>
+                    <PageTitle name={'Club Transfer Request'} />
                 </View>
                 <View style={{ width: '90%', maxWidth: 500, backgroundColor: colors.lightBackgroundColor, borderRadius: 10 }}>
-                    <View style={{ width: '90%', alignSelf: 'center', marginTop: 10, }}>
-                        <Text style={{ color: colors.textPrimary, alignSelf: 'center', marginBottom: SIZES.twenty, fontSize: FONT.twenty }}>Club Transfer Request</Text>
+                    <View style={{ width: '90%', alignSelf: 'center', marginTop: SIZES.twentyFive, }}>
 
                         <MaskedTextInput
                             type="currency"
@@ -93,9 +95,11 @@ const ClubAccountTransfer = () => {
                             placeholder="Enter transfer amount"
                             placeholderTextColor={PLACEHOLDERCOLOR}
                         />
-                        <TextInput multiline={true} numberOfLines={SIZES.fifty} style={[textInput, { textAlignVertical: 'top', height: SIZES.oneHundred, marginTop: SIZES.twenty }]} placeholder='Type description here...' placeholderTextColor={PLACEHOLDERCOLOR} onChangeText={(value) => { handleChange(value, 'description') }} />
+                        <TextInput multiline={true} numberOfLines={SIZES.fifty} style={[textInput, { textAlignVertical: 'top', height: SIZES.oneHundred, marginTop: SIZES.ten, marginBottom: SIZES.twenty }]} placeholder='Type description here...' placeholderTextColor={PLACEHOLDERCOLOR} onChangeText={(value) => { handleChange(value, 'description') }} />
 
-                        <Button title={'Submit'} action={() => { handleSubmit() }} />
+                        <View style={{ marginBottom: SIZES.twentyFive }}>
+                            <Button title={'Submit'} action={() => { handleSubmit() }} />
+                        </View>
                     </View>
                 </View>
             </ScrollView>

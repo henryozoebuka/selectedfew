@@ -82,7 +82,7 @@ const fetchAnnouncements = async (req, res) => {
 
     try {
         const announcements = await AnnouncementModel.find()
-            .populate('author');
+            .populate('author', 'firstname lastname');
         if (!announcements) {
             return res.status(404).json({ message: 'No announcements found.' })
         }
@@ -95,13 +95,19 @@ const fetchAnnouncements = async (req, res) => {
 
 //edit announcement
 const editAnnouncement = async (req, res) => {
-    const {  announcementId, title, body, published, thumbnail } = req.body;
-
+    const {  author, announcementId, title, body, published, thumbnail } = req.body;
+    
     // Input validation
     if (!title || !body) {
         return res.status(400).json({ message: 'Your announcement must have a title and body content to continue.' });
     }
     try {
+
+        const userExists = await UserModel.findById(author);
+        if (!userExists) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
         // Check if the announcement exists first
         const announcement = await AnnouncementModel.findById(announcementId);
         if (!announcement) {
@@ -118,7 +124,47 @@ const editAnnouncement = async (req, res) => {
         }, {new: true});
 
         // Success response
-        res.status(200).json({ message: 'Announcement updated successfully!' });
+
+        if (!announcement.published) {
+            return res.status(200).json({ message: 'Announcement updated successfully!' });
+        }
+
+        // Fetch all users
+        const users = await UserModel.find({}, 'email firstname lastname role');
+
+        if (!users || users.length === 0) {
+            return res.status(500).json({ message: 'No users found to send emails.' });
+        }
+
+        // Extract emails
+        const recipientEmails = users.map(user => user.email).join(',');
+
+        // Prepare email sender details (assuming `userExists` is the sender)
+        const sender = userExists;
+
+        const mailOptions = {
+            to: recipientEmails, // Send to all users
+            from: `announcements@selectedfewclub.com`,
+            subject: `Announcement for Selected Few Club Members`,
+            html: `<p>Hi,</p>
+            <p>Please check your Selected Few Club app to see the details of this updated announcement.</p>
+            <p></p>
+            <p>Thank you,</p>
+            <p>${sender.firstname} ${sender.lastname},</p>
+            <p>${sender.role.charAt(0).toUpperCase() + sender.role.slice(1).toLowerCase()}</p>
+            <p>Selected Few Club.</p>`
+        };
+
+        // Send email
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
+            console.log('Email sent: ', info?.accepted || 'No status available');
+            res.status(200).json({ message: `Announcement updated successfully! Emails sent to all users.` });
+        });
+
+        
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: `Error updating announcement: ${error.message}` });

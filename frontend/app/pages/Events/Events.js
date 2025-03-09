@@ -1,7 +1,8 @@
 import { Text, View, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SIZES, FONT } from '../../styles/styles.js';
+import { SIZES } from '../../styles/styles.js';
+import moment from 'moment';
 import { setEvents } from '../../redux/slices/eventsSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import { setLoading } from '../../redux/slices/loadingSlice.js';
@@ -10,6 +11,7 @@ import EventCard from '../../components/EventCard/EventCard.jsx';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Events = () => {
     const colors = useSelector((state) => state.colors);
@@ -24,6 +26,7 @@ const Events = () => {
     // Fetch announcements
     const fetchEvents = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching events.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/events`);
             if (response && response.status === 200) {
@@ -54,7 +57,7 @@ const Events = () => {
                     {events && events.length ? (
                         [...events].filter(prev => prev.published === true).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((event, index) => (
                             <View key={event._id || index} style={{ width: '100%', flexDirection: 'row', columnGap: SIZES.ten, alignItems: 'center', marginBottom: 10 }}>
-                                <EventCard title={event.title} body={event.body} action={() => { navigation.navigate('event', { id: event._id }) }} />
+                                <EventCard title={event.title} postDate={moment(event.createdAt).format('MMMM D, YYYY')} body={event.body} action={() => { navigation.navigate('event', { id: event._id }) }} />
                             </View>
                         ))
                     ) : (

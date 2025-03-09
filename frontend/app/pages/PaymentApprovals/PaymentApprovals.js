@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { setUserPaymentApprovals } from '../../redux/slices/userPaymentApprovalsSlice.js';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const PaymentApprovals = () => {
   const colors = useSelector((state) => state.colors);
@@ -23,6 +24,7 @@ const PaymentApprovals = () => {
   const fetchPaymentApprovals = async () => {
     const id = user._id;
     try {
+      dispatch(setLoadingInfo('Fetching payment approvals.'));
       dispatch(setLoading(true));
       dispatch(setUserPaymentApprovals([]));
       const response = await axios.get(`${serverURL}/user-payment-approvals`, {params: {id: id}});

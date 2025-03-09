@@ -8,6 +8,7 @@ import { setLoading } from '../../redux/slices/loadingSlice.js';
 import axios from 'axios';
 import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const EditConstitution = () => {
 
@@ -43,6 +44,7 @@ const EditConstitution = () => {
 
     const handleSubmit = async () => {
         try {
+            dispatch(setLoadingInfo('Updating constitution.'));
             dispatch(setLoading(true));
             const response = await axios.patch(`${serverURL}/edit-constitution/${user._id}`, data);
             if (response && response.status === 200) {

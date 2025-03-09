@@ -1,5 +1,5 @@
-import { Image, Text, View, Pressable, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react';
+import { Image, Text, View, ScrollView } from 'react-native'
+import React, { useState } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import { setUser } from '../../redux/slices/userSlice.js';
 import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const User = () => {
     const colors = useSelector((state) => state.colors);
@@ -21,7 +22,6 @@ const User = () => {
     const user = useSelector((state) => state.user);
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [menu, setMenu] = useState(false);
     const [file, setFile] = useState(null);
     const [saved, setSaved] = useState(true);
 
@@ -61,6 +61,7 @@ const User = () => {
         }
 
         try {
+            dispatch(setLoadingInfo('Uploading file.'));
             dispatch(setLoading(true));
 
             const formData = new FormData();
@@ -161,6 +162,14 @@ const User = () => {
                         <Text style={{ textTransform: 'uppercase', fontSize: FONT.ten, color: colors.textPrimary, }}>Account Number</Text>
                         <View style={{ display: 'flex', flexDirection: 'row', gap: SIZES.ten }}>
                             <Text style={{ color: colors.textPrimary, fontSize: FONT.fifteen }}>{user.accountNumber}</Text>
+                        </View>
+                        <View style={{ height: SIZES.two, width: '100%', backgroundColor: '#EAEAEA', marginBottom: SIZES.ten }}></View>
+                    </View>
+
+                    <View>
+                        <Text style={{ textTransform: 'uppercase', fontSize: FONT.ten, color: colors.textPrimary, }}>Status</Text>
+                        <View style={{ display: 'flex', flexDirection: 'row', gap: SIZES.ten }}>
+                            <Text style={{ color: colors.textPrimary, fontSize: FONT.fifteen }}>{user?.status?.charAt(0).toUpperCase() + user?.status?.slice(1)}</Text>
                         </View>
                         <View style={{ height: SIZES.two, width: '100%', backgroundColor: '#EAEAEA', marginBottom: SIZES.ten }}></View>
                     </View>

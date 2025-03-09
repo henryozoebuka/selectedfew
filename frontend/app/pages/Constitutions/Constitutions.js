@@ -1,36 +1,33 @@
 import { Text, View, ScrollView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SIZES, FONT } from '../../styles/styles.js';
-import { setMinutesArchive } from '../../redux/slices/minutesArchiveSlice.js';
+import { setConstitutions } from '../../redux/slices/constitutionsSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import { setLoading } from '../../redux/slices/loadingSlice.js';
 import Footer from '../../components/Footer/Footer.jsx';
-import MinutesCard from '../../components/MinutesCard/MinutesCard.jsx';
+import ConstitutionCard from '../../components/ConstitutionCard/ConstitutionCard.jsx';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import moment from 'moment';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
 import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
-const MinutesArchive = () => {
+const Constitutions = () => {
     const colors = useSelector((state) => state.colors);
     const serverURL = useSelector((state) => state.serverURL);
-    const minutesArchive = useSelector((state) => state.minutesArchive);
+    const constitutions = useSelector((state) => state.constitutions);
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    // State to track selected minutes archive
-    const [selectedMinutesArchive, setSelectedMinutesArchive] = useState([]);
 
-    // Fetch minutes archive
-    const fetchMinutesArchive = async () => {
+    // Fetch constitutions
+    const fetchConstitutions = async () => {
         try {
-            dispatch(setLoadingInfo('Fetching minutes archive.'));
+            dispatch(setLoadingInfo('Fetching constitutions.'));
             dispatch(setLoading(true));
-            const response = await axios.get(`${serverURL}/minutes-archive`);
+            const response = await axios.get(`${serverURL}/constitutions`);
             if (response && response.status === 200) {
-                dispatch(setMinutesArchive(response.data));
+                dispatch(setConstitutions(response.data));
             }
         } catch (error) {
             if (error?.response?.data?.message) {
@@ -44,20 +41,21 @@ const MinutesArchive = () => {
         }
     };
 
+
     useEffect(() => {
-        fetchMinutesArchive();
+        fetchConstitutions();
     }, []);
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.backgroundColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <PageTitle name={'Minutes Archive'} />
+            <PageTitle name={'constitutions'} />
             <ScrollView style={{ width: '90%', maxWidth: 500, marginVertical: SIZES.twenty }}>
 
                 <View style={{ width: '90%', alignSelf: 'center', marginBottom: SIZES.twenty }}>
-                    {minutesArchive && minutesArchive.length ? (
-                        [...minutesArchive].filter(prev => prev.published === true).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((minutes, index) => (
-                            <View key={minutes._id || index} style={{ width: '100%', flexDirection: 'row', columnGap: SIZES.ten, alignItems: 'center', marginBottom: 10 }}>
-                                    <MinutesCard title={minutes.title} body={minutes.body} postDate={moment(minutes.createdAt).format('MMMM D, YYYY')} action={() => { navigation.navigate('minutes', { id: minutes._id })}}/>
+                    {constitutions && constitutions.length ? (
+                        [...constitutions].filter(prev => prev.published === true).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((constitution, index) => (
+                            <View key={constitution._id || index} style={{ width: '100%', flexDirection: 'row', columnGap: SIZES.ten, alignItems: 'center', marginBottom: 10 }}>
+                                    <constitutionCard title={constitution.title} body={constitution.body} postDate={constitution.createdAt} action={() => { navigation.navigate('constitution', { id: constitution._id })}}/>
                             </View>
                         ))
                     ) : (
@@ -71,4 +69,4 @@ const MinutesArchive = () => {
     );
 };
 
-export default MinutesArchive;
+export default Constitutions;

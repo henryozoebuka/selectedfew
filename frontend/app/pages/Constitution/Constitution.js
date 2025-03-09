@@ -1,4 +1,4 @@
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View, ScrollView, Pressable } from 'react-native'
 import React, { useEffect, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SIZES, FONT } from '../../styles/styles.js';
@@ -12,6 +12,7 @@ import { setLoading } from '../../redux/slices/loadingSlice.js';
 import axios from 'axios';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Constitution = () => {
     const colors = useSelector((state) => state.colors);
@@ -24,6 +25,7 @@ const Constitution = () => {
     //fetch constitution
     const fetchConstitution = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching consitution.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/constitution`);
             if (response && response.status === 200) {
@@ -52,7 +54,12 @@ const Constitution = () => {
                 <View style={{ flexDirection: 'row', columnGap: SIZES.twenty, justifyContent: 'flex-end', width: '100%' }}>
                     {
                         (user?.role === 'chairman' || user?.role === 'secretary') &&
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '100%'}}>
+                            <Pressable onPress={() => {navigation.navigate('add-constitution')}}>
+                                <Text style={{color: colors.textPrimary, fontWeight: 'bold'}}>Add New Constitution</Text>
+                            </Pressable>
                         <FontAwesome name="edit" size={SIZES.twentyFive} color={colors.textPrimary} onPress={() => { navigation.navigate('edit-constitution') }} />
+                        </View>
                     }
                 </View>
             </View>

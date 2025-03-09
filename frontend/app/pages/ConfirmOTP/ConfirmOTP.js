@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SIZES } from '../../styles/styles.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import { setLoading } from '../../redux/slices/loadingSlice.js';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const ConfirmOTP = () => {
     const colors = useSelector((state) => state.colors);
@@ -57,6 +58,7 @@ const ConfirmOTP = () => {
     //handle submit
     const handleSubmit = async () => {
         try {
+            dispatch(setLoadingInfo('Processing your OTP.'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/confirm-otp`, data);
             if (response && response.status === 200) {

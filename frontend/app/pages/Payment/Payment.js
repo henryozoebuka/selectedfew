@@ -14,6 +14,7 @@ import { setFailure } from '../../redux/slices/failureSlice.js';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
 import Button from '../../components/Button/Button.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Payment = () => {
     const colors = useSelector((state) => state.colors);
@@ -30,6 +31,7 @@ const Payment = () => {
     //make payment
     const makePayment = async () => {
         try {
+            dispatch(setLoadingInfo('Making payment.'));
             dispatch(setLoading(true));
             const response = await axios.patch(`${serverURL}/make-payment`, { paymentId: id, userId: user._id });
             if (response && response.status === 200) {

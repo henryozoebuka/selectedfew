@@ -16,6 +16,7 @@ import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationMo
 import SecondButton from '../../components/SecondButton/SecondButton.jsx';
 import moment from 'moment';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const ClubAccountTransfers = () => {
     const colors = useSelector((state) => state.colors);
@@ -31,6 +32,7 @@ const ClubAccountTransfers = () => {
     // Fetch announcements
     const fetchAccountTransfers = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching transfers.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/club-fund-transfers`);
             if (response && response.status === 200) {
@@ -51,6 +53,7 @@ const ClubAccountTransfers = () => {
     // Delete announcements
     const deleteClubTransfers = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting transfer(s).'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-club-transfers`, { data: { clubTransfers: selectedAccountTransfers } });
             if (response && response.status === 200) {
@@ -102,9 +105,9 @@ const ClubAccountTransfers = () => {
             <PageTitle name={'Manage Club Transfers'} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', width: '90%', marginTop: SIZES.twenty }}>
                 <SecondButton title={'Club Account Transfer'} bold={'bold'} action={() => { navigation.navigate('club-account-transfer'); }} />
-                <Pressable disabled={selectedAccountTransfers.length ? false : true} onPress={() => { toggleDeleteModal(); }}>
+                {/* <Pressable disabled={selectedAccountTransfers.length ? false : true} onPress={() => { toggleDeleteModal(); }}>
                     <MaterialIcons name="delete" size={SIZES.thirty} color={selectedAccountTransfers.length ? colors.textPrimary : colors.lightBackgroundColor} />
-                </Pressable>
+                </Pressable> */}
             </View>
 
             <ScrollView style={{ width: '90%', maxWidth: 500, marginVertical: SIZES.twenty }}>

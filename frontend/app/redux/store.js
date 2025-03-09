@@ -22,13 +22,16 @@ import userPaymentsReducer from './slices/userPaymentsSlice.js';
 import paymentApprovalsReducer from './slices/paymentApprovalsSlice.js';
 import paymentApprovalReducer from './slices/paymentApprovalSlice.js';
 import constitutionReducer from './slices/constitutionSlice.js';
-import clubTransferReducer from './slices/clubTransferSlice.js'
-import clubTransfersReducer from './slices/clubTransfersSlice.js'
-import transactionHistoryReducer from './slices/transactionHistorySlice.js'
-import adminTransactionHistoryReducer from './slices/adminTransactionHistorySlice.js'
-import viewTransactionHistoryReducer from './slices/viewTransactionHistorySlice.js'
-import userPaymentApprovalReducer from './slices/userPaymentApprovalSlice.js'
-import userPaymentApprovalsReducer from './slices/userPaymentApprovalsSlice.js'
+import constitutionsReducer from './slices/constitutionsSlice.js';
+import clubTransferReducer from './slices/clubTransferSlice.js';
+import clubTransfersReducer from './slices/clubTransfersSlice.js';
+import transactionHistoryReducer from './slices/transactionHistorySlice.js';
+import adminTransactionHistoryReducer from './slices/adminTransactionHistorySlice.js';
+import viewTransactionHistoryReducer from './slices/viewTransactionHistorySlice.js';
+import userPaymentApprovalReducer from './slices/userPaymentApprovalSlice.js';
+import userPaymentApprovalsReducer from './slices/userPaymentApprovalsSlice.js';
+import isLoggedInReducer from './slices/isLoggedInSlice.js';
+import loadingInfoReducer from './slices/loadingInfoSlice.js';
 
 export default configureStore({
     reducer: {
@@ -55,6 +58,7 @@ export default configureStore({
         paymentApprovals: paymentApprovalsReducer,
         paymentApproval: paymentApprovalReducer,
         constitution: constitutionReducer,
+        constitutions: constitutionsReducer,
         clubTransfer: clubTransferReducer,
         clubTransfers: clubTransfersReducer,
         transactionHistory: transactionHistoryReducer,
@@ -62,5 +66,7 @@ export default configureStore({
         viewTransactionHistory: viewTransactionHistoryReducer,
         userPaymentApproval: userPaymentApprovalReducer,
         userPaymentApprovals: userPaymentApprovalsReducer,
+        isLoggedIn: isLoggedInReducer,
+        loadingInfo: loadingInfoReducer,
     }
 });

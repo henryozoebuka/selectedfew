@@ -93,6 +93,22 @@ const fetchConstitution = async (req, res) => {
     }
 }
 
+//fetch constitutions
+const fetchConstitutions = async (req, res) => {
+
+    try {
+        const constitutions = await AnnouncementModel.find()
+            .populate('author', 'firstname lastname');
+        if (!constitutions) {
+            return res.status(404).json({ message: 'No constitutions found.' })
+        }
+        res.status(200).json(constitutions);
+    } catch (error) {
+        console.error('Error fetching constitutions:', error);
+        res.status(500).json({ message: `Internal Server Error: ${error.message}` });
+    }
+}
+
 //edit constitution
 const editConstitution = async (req, res) => {
     const { constitutionId, title, body, author, published } = req.body;
@@ -180,4 +196,4 @@ const deleteConstitution = async (req, res) => {
 
 
 
-export { createConstitution, editConstitution, fetchConstitution }
+export { createConstitution, editConstitution, fetchConstitution, fetchConstitutions }

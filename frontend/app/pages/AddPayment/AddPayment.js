@@ -16,6 +16,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import SelectMembersModal from '../../components/SelectMembersModal/SelectMembersModal.jsx';
 import Octicons from '@expo/vector-icons/Octicons';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 
 const CreatePayment = () => {
@@ -71,6 +72,7 @@ const CreatePayment = () => {
         }
 
         try {
+            dispatch(setLoadingInfo('Adding payment.'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/create-payment`, data);
             if (response && response.status === 201) {

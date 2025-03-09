@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SIZES, FONT } from '../../styles/styles.js';
 import Footer from '../../components/Footer/Footer.jsx';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { setViewTransactionHistory } from '../../redux/slices/viewTransactionHistorySlice.js';
 import Entypo from '@expo/vector-icons/Entypo';
 
@@ -15,7 +15,6 @@ const ViewTransactionHistory = () => {
     const transactionHistory = useSelector((state) => state.transactionHistory);
     const viewTransactionHistory = useSelector((state) => state.viewTransactionHistory);
     const dispatch = useDispatch();
-    const navigation = useNavigation();
     const route = useRoute();
     const { id } = route.params;
 

@@ -5,6 +5,7 @@ import { PLACEHOLDERCOLOR, SIZES, FONT } from '../../styles/styles';
 import Button from '../../components/Button/Button.jsx';
 import { useNavigation } from '@react-navigation/native';
 import { setLoading } from '../../redux/slices/loadingSlice.js';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 import axios from 'axios';
 import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
@@ -37,6 +38,7 @@ const AddConstitution = () => {
 
     const handleSubmit = async () => {
         try {
+            dispatch(setLoadingInfo('Adding constitution.'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/create-constitution`, data);
             if (response && response.status === 201) {

@@ -16,6 +16,7 @@ import { setSuccess } from '../../redux/slices/successSlice.js';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
 import SecondButton from '../../components/SecondButton/SecondButton.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminPayments = () => {
     const colors = useSelector((state) => state.colors);
@@ -31,6 +32,7 @@ const AdminPayments = () => {
     // Fetch announcements
     const fetchPayments = async () => {
         try {
+            dispatch(setLoadingInfo('Fetching payments.'));
             dispatch(setLoading(true));
             const response = await axios.get(`${serverURL}/payments`);
             if (response && response.status === 200) {
@@ -51,9 +53,11 @@ const AdminPayments = () => {
     // Delete announcements
     const deletePayments = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting payment(s).'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-payments`, { data: { payments: selectedPayments } });
             if (response && response.status === 200) {
+                setSelectedPayments([]);
                 const currentPayments = payments.filter(prev => !selectedPayments.includes(prev._id));
                 dispatch(setPayments(currentPayments));
                 dispatch(setSuccess(response.data.message));
@@ -77,7 +81,7 @@ const AdminPayments = () => {
 
     useEffect(() => {
         fetchPayments();
-    }, [selectedPayments]);
+    }, []);
 
     // Toggle selection
     const toggleSelection = (id) => {

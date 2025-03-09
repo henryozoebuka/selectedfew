@@ -1,5 +1,5 @@
 import { Text, View, Pressable, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Entypo from '@expo/vector-icons/Entypo';
 import { PLACEHOLDERCOLOR, SIZES, FONT } from '../../styles/styles.js';
@@ -10,9 +10,11 @@ import SecondButton from '../../components/SecondButton/SecondButton.jsx';
 import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import { setLoading } from '../../redux/slices/loadingSlice.js';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 import { setUser } from '../../redux/slices/userSlice.js';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setIsLoggedIn } from '../../redux/slices/isLoggedInSlice.js';
 
 
 const Login = () => {
@@ -20,6 +22,7 @@ const Login = () => {
   const serverURL = useSelector((state) => state.serverURL);
   const textInput = useSelector((state) => state.textInput);
   const user = useSelector((state) => state.user);
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [data, setData] = useState();
@@ -32,6 +35,7 @@ const Login = () => {
   //handle submit
   const handleSubmit = async () => {
     try {
+      dispatch(setLoadingInfo('Logging in.'));
       dispatch(setLoading(true));
       const response = await axios.post(`${serverURL}/login`, data);
       if (response) {
@@ -50,6 +54,7 @@ const Login = () => {
           setTimeout(() => {
             dispatch(setSuccess(''));
             navigation.navigate('user');
+            dispatch(setIsLoggedIn());
           }, 3000);
         }
       }
@@ -65,6 +70,12 @@ const Login = () => {
       dispatch(setLoading(false));
     }
   }
+
+//   useEffect(() => {
+//     if (isLoggedIn || user.firstname) {
+//         navigation.navigate('info');
+//     }
+// }, [isLoggedIn, navigation]);
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.backgroundColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

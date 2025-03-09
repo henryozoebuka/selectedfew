@@ -1,7 +1,7 @@
 import { Text, View, Pressable, ScrollView } from 'react-native'
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { PLACEHOLDERCOLOR, SIZES, FONT } from '../../styles/styles.js';
+import { SIZES, FONT } from '../../styles/styles.js';
 import Footer from '../../components/Footer/Footer.jsx';
 import { useRoute } from '@react-navigation/native';
 import { setUserPaymentApproval } from '../../redux/slices/userPaymentApprovalSlice.js';
@@ -11,9 +11,7 @@ import PageTitle from '../../components/PageTitle/PageTitle.jsx';
 
 const PaymentApproval = () => {
     const colors = useSelector((state) => state.colors);
-    const textInput = useSelector((state) => state.textInput);
-    const user = useSelector((state) => state.user);
-    const paymentApprovals = useSelector((state) => state.paymentApprovals);
+    const userPaymentApprovals = useSelector((state) => state.userPaymentApprovals);
     const userPaymentApproval = useSelector((state) => state.userPaymentApproval);
     const route = useRoute();
     const { id } = route.params;
@@ -22,17 +20,16 @@ const PaymentApproval = () => {
 
     useEffect(() => {
 
-        if (paymentApprovals) {
+        if (userPaymentApprovals) {
 
-            const individualPaymentApproval = paymentApprovals.find(item => item._id === id);
+            const individualPaymentApproval = userPaymentApprovals.find(item => item._id === id);
 
 
             if (individualPaymentApproval) {
                 dispatch(setUserPaymentApproval(individualPaymentApproval));
             }
         }
-        console.log(userPaymentApproval)
-    }, [paymentApprovals])
+    }, [userPaymentApprovals])
 
 
     return (

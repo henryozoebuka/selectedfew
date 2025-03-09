@@ -13,6 +13,7 @@ import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AdminPaymentApproval = () => {
     const colors = useSelector((state) => state.colors);
@@ -70,6 +71,7 @@ const AdminPaymentApproval = () => {
     // Approve payment
     const approvePayment = async () => {
         try {
+            dispatch(setLoadingInfo('Approving payment.'));
             dispatch(setLoading(true));
             const response = await axios.patch(`${serverURL}/approve-payment`, data);
             console.log(paymentApproval.sender);
@@ -98,6 +100,7 @@ const AdminPaymentApproval = () => {
     // Reject payment
     const rejectPayment = async () => {
         try {
+            dispatch(setLoadingInfo('Rejecting payment'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/reject-payment`, data)
             if (response && response.status === 200) {

@@ -13,6 +13,7 @@ import Button from '../../components/Button/Button.jsx';
 import { setUser } from '../../redux/slices/userSlice.js';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const EditUser = () => {
   const serverURL = useSelector((state) => state.serverURL);
@@ -50,6 +51,7 @@ const EditUser = () => {
     }
 
     try {
+      dispatch(setLoadingInfo('Updating user information.'));
       dispatch(setLoading(true));
       const response = await axios.patch(`${serverURL}/edit-user/${user._id}`, data);
       if (response && response.status === 200) {

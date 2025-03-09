@@ -11,6 +11,8 @@ import axios from 'axios';
 import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import Footer from '../../components/Footer/Footer.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const EditEvent = () => {
 
@@ -20,6 +22,7 @@ const EditEvent = () => {
     const serverURL = useSelector((state) => state.serverURL);
     const textInput = useSelector((state) => state.textInput);
     const [data, setData] = useState({
+        author: user._id || '',
         eventId: '',
         title: '',
         body: '',
@@ -45,6 +48,7 @@ const EditEvent = () => {
 
     const handleSubmit = async () => {
         try {
+            dispatch(setLoadingInfo('Updating event.'));
             dispatch(setLoading(true));
             const response = await axios.patch(`${serverURL}/edit-event/${user._id}`, data);
             if (response && response.status === 200) {
@@ -68,6 +72,7 @@ const EditEvent = () => {
 
     useEffect(() => {
         setData({
+            author: user._id || '',
             eventId: event._id || '',
             title: event.title || '',
             body: event.body || '',
@@ -99,6 +104,7 @@ const EditEvent = () => {
                 </View>
                 <Button title={'Update'} action={handleSubmit} />
             </ScrollView>
+            <Footer />
         </View>
     )
 }

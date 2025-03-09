@@ -297,12 +297,13 @@ const confirmOTP = async (req, res) => {
 //login
 const login = async (req, res) => {
     const { email, password } = req.body;
+    console.log(password)
     if (!email || !password) {
         return res.status(400).json({ message: "All fields are required!" });
     }
 
     try {
-        const user = await UserModel.findOne({ $or: [{ email: email }, { phoneNumber: email }] });
+        const user = await UserModel.findOne({ $or: [{ email: email }, { phoneNumber: email }] }).select("firstname lastname email phoneNumber gender photo role accountNumber accountBalance status OTPNumberOfAttempts createdAt updatedAt");
         if (!user) {
             return res.status(404).json({ message: 'User does not exist' });
         }
@@ -366,8 +367,9 @@ const logout = (req, res) => {
     });
 
     // Respond with a success message or redirect
-    res.status(200).json({ message: 'Logged out successfully' });
+    res.status(200).json({ message: 'Logged out successfully', user: {} });
 };
+
 
 //forgot password
 const forgotPassword = async (req, res) => {
@@ -581,7 +583,7 @@ const resetPassword = async (req, res) => {
 const fetchUsers = async (req, res) => {
     try {
 
-        const users = await UserModel.find();
+        const users = await UserModel.find().select("firstname lastname email phoneNumber gender photo role accountNumber accountBalance status OTPNumberOfAttempts createdAt updatedAt");
 
         // Check if the array is empty
         if (users.length === 0) {

@@ -13,6 +13,7 @@ import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const ApproveClubTransfer = () => {
     const colors = useSelector((state) => state.colors);
@@ -57,6 +58,7 @@ const ApproveClubTransfer = () => {
     // Approve club transfer
     const approveClubTransfer = async () => {
         try {
+            dispatch(setLoadingInfo('Approving transfer'));
             dispatch(setLoading(true));
             const response = await axios.patch(`${serverURL}/approve-club-transfer`, data);
             if (response && response.status === 200) {
@@ -84,6 +86,7 @@ const ApproveClubTransfer = () => {
     // Reject club transfer
     const rejectClubTransfer = async () => {
         try {
+            dispatch(setLoadingInfo('Rejecting transfer'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/reject-club-transfer`, data);
             if (response && response.status === 200) {
@@ -179,7 +182,7 @@ const ApproveClubTransfer = () => {
                 <View style={{ height: SIZES.two, width: '100%', backgroundColor: '#EAEAEA', marginBottom: SIZES.twenty }}></View>
 
                 <Text style={{ textTransform: 'uppercase', fontSize: FONT.ten, color: colors.textPrimary, }}>Initiated By</Text>
-                <Text style={{ color: colors.textPrimary, textTransform: 'capitalize', fontSize: FONT.twenty }}>{clubTransfer.initiatedBy.firstname + " " + clubTransfer.initiatedBy?.lastname}</Text>
+                <Text style={{ color: colors.textPrimary, textTransform: 'capitalize', fontSize: FONT.twenty }}>{clubTransfer.initiatedBy?.firstname + " " + clubTransfer.initiatedBy?.lastname}</Text>
                 <View style={{ height: SIZES.two, width: '100%', backgroundColor: '#EAEAEA', marginBottom: SIZES.twenty }}></View>
 
                 <Text style={{ textTransform: 'uppercase', fontSize: FONT.ten, color: colors.textPrimary, }}>Initiated On</Text>

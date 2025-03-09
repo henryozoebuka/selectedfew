@@ -10,6 +10,8 @@ import SecondButton from '../../components/SecondButton/SecondButton.jsx';
 import axios from 'axios';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import { setLoading } from '../../redux/slices/loadingSlice.js';
+import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const ForgotPassword = () => {
   const colors = useSelector((state) => state.colors);
@@ -31,6 +33,7 @@ const ForgotPassword = () => {
   //handle submit
   const handleSubmit = async () => {
     try {
+      dispatch(setLoadingInfo('Resetting password.'));
       dispatch(setLoading(true));
       const response = await axios.post(`${serverURL}/forgot-password`, data);
       if (response && response.status === 200) {
@@ -53,15 +56,14 @@ const ForgotPassword = () => {
       <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '90%' }}>
         <View style={{ marginBottom: SIZES.thirty, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
           <Entypo name="lock" size={SIZES.twentyFive} color={colors.textPrimary} />
-          <Text style={{ color: colors.textPrimary, fontSize: FONT.twentyFive }}>SELECTED FEW</Text>
+          <PageTitle name={'Forgot Password'} />
         </View>
         <View style={{ display: 'flex', width: '90%', maxWidth: 500, backgroundColor: colors.lightBackgroundColor, borderRadius: 10 }}>
-          <View style={{ width: '90%', marginTop: 20, alignSelf: 'center' }}>
-            <Text style={{ color: colors.textPrimary, alignSelf: 'center', marginBottom: SIZES.twenty, fontSize: FONT.twenty }}>Forgot Password</Text>
+          <View style={{ width: '90%', marginTop: SIZES.twentyFive, alignSelf: 'center' }}>
             <TextInput style={textInput} placeholder='Enter your email' placeholderTextColor={PLACEHOLDERCOLOR} onChangeText={(value) => { handleChange(value, 'email') }} />
             <TextInput style={textInput} placeholder='Enter your Phone Number' placeholderTextColor={PLACEHOLDERCOLOR} onChangeText={(value) => { handleChange(value, 'phoneNumber') }} />
             <Button title={'Submit'} action={handleSubmit} />
-            <SecondButton title={'Go back to Login'} action={() => { navigation.navigate('login'); }} />
+            <SecondButton title={'Back to Login'} action={() => { navigation.navigate('login'); }} />
           </View>
         </View>
       </View>

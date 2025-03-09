@@ -15,11 +15,15 @@ const Footer = () => {
     return null
   }
   return (
-    <View style={{ width: '100%',  position: 'absolute', bottom: 0, left: 0, backgroundColor: colors.lightBackgroundColor }}>
+    <View style={{ width: '100%', position: 'absolute', bottom: 0, left: 0, backgroundColor: colors.lightBackgroundColor }}>
       <View style={{ width: '80%', maxWidth: 500, marginVertical: SIZES.five, alignSelf: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
 
+        <Pressable onPress={() => { navigation.navigate('info'); }}>
+          <AntDesign name="home" size={SIZES.twentyFive} color="black" />
+        </Pressable>
+
         <Pressable onPress={() => { navigation.navigate('user'); }}>
-          <AntDesign name="user" size={24} color={colors.textPrimary} />
+          <AntDesign name="user" size={SIZES.twentyFive} color={colors.textPrimary} />
         </Pressable>
 
         <Pressable onPress={() => { navigation.navigate('login'); }}>

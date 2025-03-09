@@ -15,6 +15,7 @@ import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Event = () => {
     const colors = useSelector((state) => state.colors);
@@ -36,11 +37,12 @@ const Event = () => {
     // Delete event
     const deleteEvent = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting event.'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-event`, { data: { event: event._id } })
             if (response && response.status === 200) {
                 dispatch(setSuccess(response.data.message));
-                navigation.navigate('events');
+                navigation.navigate('admin-events');
                 setModal(false);
                 setTimeout(() => {
                     dispatch(setSuccess(''));
@@ -58,6 +60,7 @@ const Event = () => {
             dispatch(setLoading(false));
         }
     }
+
     useEffect(() => {
         if (events) {
             const individualEvent = events.find(item => item._id === id);

@@ -15,6 +15,7 @@ import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const Minutes = () => {
     const colors = useSelector((state) => state.colors);
@@ -36,11 +37,12 @@ const Minutes = () => {
     // Delete minutes
     const deleteMinutes = async () => {
         try {
+            dispatch(setLoadingInfo('Deleting minutes.'));
             dispatch(setLoading(true));
             const response = await axios.delete(`${serverURL}/delete-minutes`, { data: { minutes: minutes._id } })
             if (response && response.status === 200) {
                 dispatch(setSuccess(response.data.message));
-                navigation.navigate('minutes-archive');
+                navigation.navigate('admin-minutes-archive');
                 setModal(false);
                 setTimeout(() => {
                     dispatch(setSuccess(''));

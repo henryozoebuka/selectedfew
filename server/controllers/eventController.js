@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 // const createEvent = async (req, res) => {
 //     const { title, body, category, tags, author, published } = req.body;
-    
+
 //     // Input validation
 //     if (!title || !body) {
 //         return res.status(400).json({ message: 'Your event must have a title and body content to continue.' });
@@ -83,7 +83,7 @@ const createEvent = async (req, res) => {
 
         // Create new event
         const newEvent = await EventModel.create({
-            title, author, body, category, published, tags, 
+            title, author, body, category, published, tags,
             thumbnail: req.file ? req.file.location : null,
         });
 
@@ -140,7 +140,7 @@ const fetchEvents = async (req, res) => {
 
     try {
         const events = await EventModel.find()
-            .populate('author');
+            .populate('author', 'firstname lastname');
         if (!events) {
             return res.status(404).json({ message: 'No events found.' })
         }
@@ -153,13 +153,19 @@ const fetchEvents = async (req, res) => {
 
 //edit event
 const editEvent = async (req, res) => {
-    const {  eventId, title, body, published, thumbnail } = req.body;
+    const { author, eventId, title, body, published, thumbnail } = req.body;
 
     // Input validation
     if (!title || !body) {
         return res.status(400).json({ message: 'Your event must have a title and body content to continue.' });
     }
     try {
+
+        const userExists = await UserModel.findById(author);
+                if (!userExists) {
+                    return res.status(404).json({ message: 'User not found.' });
+                }
+        
         // Check if the event exists first
         const event = await EventModel.findById(eventId);
         if (!event) {
@@ -173,10 +179,48 @@ const editEvent = async (req, res) => {
             published,
             updatedAt: Date.now(),
             thumbnail: req.file ? req.file.location : thumbnail ? thumbnail : null,
-        }, {new: true});
+        }, { new: true });
 
-        // Success response
-        res.status(200).json({ message: 'Event updated successfully!' });
+        if (!event.published) {
+            // Success response
+            return res.status(200).json({ message: 'Event updated successfully!' });
+        }
+
+        // Fetch all users
+        const users = await UserModel.find({}, 'email firstname lastname role');
+
+        if (!users || users.length === 0) {
+            return res.status(500).json({ message: 'No users found to send emails.' });
+        }
+
+        // Extract emails
+        const recipientEmails = users.map(user => user.email).join(',');
+
+        // Prepare email sender details (assuming `userExists` is the sender)
+        const sender = userExists;
+
+        const mailOptions = {
+            to: recipientEmails, // Send to all users
+            from: `events@selectedfewclub.com`,
+            subject: `Upcoming event for Selected Few Club`,
+            html: `<p>Hi,</p>
+            <p>Please check your Selected Few Club app to see the details of this updated event.</p>
+            <p></p>
+            <p>Thank you,</p>
+            <p>${sender.firstname} ${sender.lastname},</p>
+            <p>${sender.role.charAt(0).toUpperCase() + sender.role.slice(1).toLowerCase()}</p>
+            <p>Selected Few Club.</p>`
+        };
+
+        // Send email
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
+            console.log('Email sent: ', info?.accepted || 'No status available');
+            res.status(200).json({ message: `Event updated successfully! Emails sent to all users.` });
+        });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: `Error updating event: ${error.message}` });
@@ -185,7 +229,7 @@ const editEvent = async (req, res) => {
 
 //delete user account
 const deleteEvent = async (req, res) => {
-    const {event} = req.body;
+    const { event } = req.body;
 
     try {
         const deletedEvent = await EventModel.findByIdAndDelete(event);

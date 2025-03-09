@@ -8,6 +8,7 @@ import { setLoading } from '../../redux/slices/loadingSlice.js';
 import axios from 'axios';
 import { setSuccess } from '../../redux/slices/successSlice.js';
 import { setFailure } from '../../redux/slices/failureSlice.js';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 const AddMinutes = () => {
 
@@ -37,6 +38,7 @@ const AddMinutes = () => {
 
     const handleSubmit = async () => {
         try {
+            dispatch(setLoadingInfo('Adding minutes'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/create-minutes`, data);
             if (response && response.status === 201) {

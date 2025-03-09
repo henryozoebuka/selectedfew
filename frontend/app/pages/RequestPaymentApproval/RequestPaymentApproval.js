@@ -11,6 +11,7 @@ import { setLoading } from '../../redux/slices/loadingSlice.js';
 import Footer from '../../components/Footer/Footer.jsx';
 import Button from '../../components/Button/Button.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
+import { setLoadingInfo } from '../../redux/slices/loadingInfoSlice.js';
 
 
 const RequestPaymentApproval = () => {
@@ -43,6 +44,7 @@ const RequestPaymentApproval = () => {
         }
 
         try {
+            dispatch(setLoadingInfo('Requesting payment approval.'));
             dispatch(setLoading(true));
             const response = await axios.post(`${serverURL}/request-payment-approval`, data);
             if (response && response.status === 201) {

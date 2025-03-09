@@ -10,17 +10,17 @@ import { toggleMenu } from '../../redux/slices/menuSlice.js';
 
 const Menu = () => {
   const chairmanMenu = [ 'club-account-transfer', 'club-account-transfers', 'constitution', 'request-payment-approval', 'payment-approvals', 'admin-payments', 'transfer-fund', 'payments', 'admin-events', 'admin-announcements', 'admin-minutes-archive', 'announcements', 'create-user', 'events', 'minutes-archive', 'admin-transaction-history', 'transaction-history', 'user', 'users', 'info',];
-  const secretaryMenu = [ 'constitution', 'request-payment-approval', 'transfer-fund', 'payments', 'admin-events', 'admin-announcements', 'admin-minutes-archive', 'announcements', 'events', 'minutes-archive', 'transaction-history', 'user', 'info',];
-  const treasurerMenu = [ 'club-account-transfer', 'club-account-transfers', 'constitution', 'request-payment-approval', 'payment-approvals', 'admin-payment-approvals', 'admin-payments', 'transfer-fund', 'payments', 'announcements', 'events', 'minutes-archive', 'admin-transaction-history', 'transaction-history', 'user', 'info',];
-  const memberMenu = [ 'constitution', 'request-payment-approval', 'payment-approvals', 'transfer-fund', 'payments', 'login', 'announcements', 'events', 'minutes-archive', 'transaction-history', 'user', 'info',];
-  const generalMenu = ['login', 'info'];
+  const secretaryMenu = [ 'constitution', 'request-payment-approval', 'transfer-fund', 'payments', 'admin-events', 'admin-announcements', 'admin-minutes-archive', 'announcements', 'events', 'minutes-archive', 'transaction-history', 'user', 'info', 'users'];
+  const treasurerMenu = [ 'constitution', 'request-payment-approval', 'payment-approvals', 'admin-payment-approvals', 'admin-payments', 'transfer-fund', 'payments', 'announcements', 'events', 'minutes-archive', 'admin-transaction-history', 'transaction-history', 'user', 'info', 'users'];
+  const memberMenu = [ 'constitution', 'request-payment-approval', 'payment-approvals', 'transfer-fund', 'payments', 'announcements', 'events', 'minutes-archive', 'transaction-history', 'user', 'info', 'users'];
+  const adminMenu = [ 'club-account-transfers', 'users'];
 
   const colors = useSelector((state) => state.colors);
   const user = useSelector((state) => state.user);
   const menu = useSelector((state) => state.menu);
   // const menuItems = [ 'club-account-transfer', 'club-account-transfers', 'add-constitution', 'constitution', 'request-payment-approval', 'payment-approvals', 'admin-payment-approvals', 'admin-payments', 'transfer-fund', 'payments', 'admin-events', 'admin-announcements', 'admin-minutes-archive', 'add-payment', 'login', 'add-announcement', 'announcements', 'create-user', 'add-event', 'events', 'minutes-archive', 'add-minutes', 'admin-transaction-history', 'transaction-history', 'user', 'users', 'info',];
   let menuItems = [];
-  {user && user.role === 'chairman' ? menuItems = chairmanMenu : user && user.role === 'secretary' ? menuItems = secretaryMenu : user &&  user.role === 'treasurer' ? menuItems = treasurerMenu : user && user.role === 'member' ? menuItems = memberMenu : null}
+  {user && user.role === 'chairman' ? menuItems = chairmanMenu : user && user.role === 'secretary' ? menuItems = secretaryMenu : user &&  user.role === 'treasurer' ? menuItems = treasurerMenu : user && user.role === 'admin' ? menuItems = adminMenu : user && user.role === 'member' ? menuItems = memberMenu : null}
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
